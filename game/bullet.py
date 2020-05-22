@@ -58,11 +58,11 @@ class HeroPlaneBullet(Bullet):
             self.remove(self.plane.bullets)
         self.screen.blit(self.image, self.rect)
         result = pygame.sprite.spritecollide(self, war.enemy_planes_group, False)
-
-        print(result, 66666)
         for r in result:
             # kill the bullet
             self.kill()
             # the small plane crash down
             r.crash_down()
+            war.result.score += const.ENEMY_PLANE_SMALL_POINT
+
 

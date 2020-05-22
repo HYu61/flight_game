@@ -131,19 +131,37 @@ class HeroPlane(Plane):
             self.screen.blit(self.image[0], self.rect)
         else:
             self.screen.blit(self.image[1], self.rect)
-
-        is_collided = pygame.sprite.spritecollide(self, war.enemy_planes_group, False)
+        self.auto_move(war.key_down)
+        is_collided = pygame.sprite.spritecollide(self, war.enemy_planes_group, False,
+                                                  pygame.sprite.collide_rect_ratio(0.88))
         if is_collided:
             # set the status of the game to finishe
             war.game_status = const.Status.FINISH
             # empty all enemy planes
             war.enemy_planes_group.empty()
             war.enemy_small_plane_group.empty()
+            self.bullets.empty()
             # the hero plane is crashed
             self.crash_down()
 
+            # set the score record
+            war.result.set_highest_score()
 
 
+
+    def auto_move(self, key):
+        """
+        according the value of the key move automatically
+        :param key: the value of the former key
+        """
+        if key == pygame.K_w or key == pygame.K_UP:
+            self.move_up()
+        if key == pygame.K_s or key == pygame.K_DOWN:
+            self.move_down()
+        if key == pygame.K_a or key == pygame.K_LEFT:
+            self.move_left()
+        if key == pygame.K_d or key == pygame.K_RIGHT:
+            self.move_right()
 
     def move_up(self):
         super().move_up()
